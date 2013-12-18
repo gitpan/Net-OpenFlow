@@ -15,7 +15,7 @@ Net::OpenFlow - Communicate with OpenFlow switches.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -24,13 +24,13 @@ This module allows communication with an OpenFlow compliant switch.
 use Net::OpenFlow;
 
 
-my $of = Net::OpenFlow->new;
-
 <create connection to switch>
 
-$of->send($fh, $of_message);
+my $of = Net::OpenFlow->new(io_socket => $fh);
 
-my $of_message = $of->recv($fd, $xid);
+$of->send($of_message);
+
+my $of_message = $of->recv($xid);
 
 my $of_message_type = $of_message->{'ofp_header'}{'of_type'};
 
@@ -40,7 +40,7 @@ my $of_message_type = $of_message->{'ofp_header'}{'of_type'};
 
 =cut
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 my $private_data = {};
 
@@ -70,13 +70,13 @@ my $of = Net::OpenFlow->new;
 sub new {
 	my $class = shift;
 
-	my $self = {};
+	my $ret = {};
 
-	bless $self, $class;
+	bless $ret, $class;
 
-	$self->new_init($self->__fixup_params(@_));
+	$ret->new_init($ret->__fixup_params(@_));
 
-	return $self;
+	return $ret;
 }
 
 sub new_init {
@@ -92,6 +92,29 @@ sub new_init {
 	}
 	else {
 		$ofp = Net::OpenFlow::Protocol->new;
+	}
+
+	if (defined($attr->{'io_socket'})) {
+		my $fd = fileno($attr->{'io_socket'});
+
+		if (defined $fd) {
+			eval {
+				$attr->{'io_socket'}->can(q{read});
+				$attr->{'io_socket'}->can(q{send});
+			};
+
+			if ($@) {
+				croak $@;
+			}
+		}
+		else {
+			croak q{Not a valid file handle};
+		}
+
+		$private_data->{$self}{'io_socket'} = $attr->{'io_socket'};
+	}
+	else {
+		croak q{No socket specified};
 	}
 
 	$self->protocol($ofp);
@@ -128,37 +151,48 @@ sub protocol($;$) {
 
 This function will read the OpenFlow message from the file handle and return a decoded representation.
 
-my $of_message = $of->recv($fh, $xid);
+my $of_message = $of->recv($xid);
 
 =cut
 
 sub recv($$) {
-	my $self = shift;
-	my ($fh, $xid) = @_;
-
-	my $fd = fileno($fh);
-
-	if (defined $fd) {
-		eval {
-			$fh->can(q{read});
-		};
-
-		if ($@) {
-			croak $@;
-		}
-	}
-	else {
-		croak q{Not a valid file handle};
-	}
+	my ($self, $xid) = @_;
 
 	my $of_message;
 
 	eval {
-		$of_message = $self->__recv($fh, $xid);
+		local $SIG{'__DIE__'};
+		local $SIG{'__WARN__'};
+
+		my $buf;
+	
+		$private_data->{$self}{'io_socket'}->read($buf, $Net::OpenFlow::Protocol::header_length);
+
+		$of_message = $buf;
+
+		my $ofp_header = $self->protocol->struct_decode__ofp_header(\$buf);
+
+		unless ($ofp_header->{'version'} <= $Net::OpenFlow::Protocol::openflow_version) {
+			croak q{Unsupported version};
+		}
+
+		my $bytes_remaining = ($ofp_header->{'length'} - $Net::OpenFlow::Protocol::header_length);
+
+		if ($bytes_remaining) {
+			$private_data->{$self}{'io_socket'}->read($buf, $bytes_remaining);
+
+			$of_message .= $buf;
+		}
 	};
 
 	if ($@) {
 		croak $@;
+	}
+
+	if (defined $xid) {
+#		unless ($xid == $ofp_header->{'xid'}) {
+#			croak q{Mismatched xid};
+#		}
 	}
 
 	my $ret = $self->protocol->ofpt_decode(\$of_message);
@@ -174,36 +208,27 @@ The IO::Socket family are the most likely use case for this function.
 
 my $of_message = $of->protocol->ofpt_encode(0x01, q{OFPT_HELLO}, 1);
 
-$of->send($fh, $of_message);
+$of->send($of_message);
 
 =cut
 
-sub send($$$) {
-	my $self = shift;
-	my ($fh, $data) = @_;
+sub send($$) {
+	my ($self, $of_message) = @_;
 
-	my $fd = fileno($fh);
-
-	if (defined $fd) {
-		eval {
-			$fh->can(q{send});
-		};
-
-		if ($@) {
-			croak $@;
-		}
-	}
-	else {
-		croak q{Not a valid file handle};
-	}
+	my $ret;
 
 	eval {
-		$fh->send($data);
+		local $SIG{'__DIE__'};
+		local $SIG{'__WARN__'};
+
+		$ret = $private_data->{$self}{'io_socket'}->send($of_message);
 	};
 
 	if ($@) {
 		croak $@;
 	}
+
+	return $ret;
 }
 
 sub __fixup_params {
@@ -238,39 +263,9 @@ sub __fixup_params {
 	return $ret;
 }
 
-sub __recv {
-	my $self = shift;
-	my ($fh, $xid) = @_;
-
-	my $buf;
-
-	$fh->read($buf, $Net::OpenFlow::Protocol::header_length);
-
-	my $ret = $buf;
-
-	my $ofp_header = $self->protocol->struct_decode__ofp_header(\$buf);
-
-	unless ($ofp_header->{'version'} <= $Net::OpenFlow::Protocol::openflow_version) {
-		croak q{Unsupported version};
-	}
-
-	if (defined $xid) {
-		unless ($xid == $ofp_header->{'xid'}) {
-#			croak q{Mismatched xid};
-		}
-	}
-
-	my $bytes_remaining = ($ofp_header->{'length'} - $Net::OpenFlow::Protocol::header_length);
-
-	if ($bytes_remaining) {
-		$fh->read($buf, $bytes_remaining);
-
-		$ret .= $buf;
-	}
-
-	return $ret;
-}
-
 1;
 
 =back
+
+=cut
+

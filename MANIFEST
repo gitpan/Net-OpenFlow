@@ -2,8 +2,8 @@ Changes
 Makefile.PL
 MANIFEST
 README
-t/OpenFlow.t
-t/OpenFlow/Protocol.t
-lib/OpenFlow.pm
-lib/OpenFlow/Protocol.pm
+t/Net/OpenFlow.t
+t/Net/OpenFlow/Protocol.t
+lib/Net/OpenFlow.pm
+lib/Net/OpenFlow/Protocol.pm
 META.yml                                 Module meta-data (added by MakeMaker)

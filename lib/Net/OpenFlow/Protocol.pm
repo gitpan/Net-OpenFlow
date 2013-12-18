@@ -42,11 +42,11 @@ our $openflow_version = 0x01;
 
 my $misc_defines = {
 	0x01 => {
-		q{OFPFW_NW_SRC_SHIFT} => 8,
-		q{OFPFW_NW_SRC_BITS} => 6,
-		q{OFPFW_NW_DST_SHIFT} => 14,
-		q{OFPFW_NW_DST_BITS} => 6,
-		q{OFPP_NONE} => 0xffff,
+		OFPFW_NW_SRC_SHIFT => 8,
+		OFPFW_NW_SRC_BITS => 6,
+		OFPFW_NW_DST_SHIFT => 14,
+		OFPFW_NW_DST_BITS => 6,
+		OFPP_NONE => 0xffff,
 	},
 };
 
@@ -177,7 +177,7 @@ $ofp_enums->{'ofp_bad_request_code'} = {
 };
 
 $ofp_enums->{'ofp_capabilities'} = {
-	q{bitfield} => q{},
+	bitfield => q{},
 	0x01 => {
 		(1 << 0) => q{OFPC_FLOW_STATS},
 		(1 << 1) => q{OFPC_TABLE_STATS},
@@ -245,7 +245,7 @@ $ofp_enums->{'ofp_flow_mod_failed_code'} = {
 };
 
 $ofp_enums->{'ofp_flow_mod_flags'} = {
-	q{bitfield} => q{},
+	bitfield => q{},
 	0x01 => {
 		(1 << 0) => q{OFPFF_SEND_FLOW_REM},
 		(1 << 1) => q{OFPFF_CHECK_OVERLAP},
@@ -254,7 +254,7 @@ $ofp_enums->{'ofp_flow_mod_flags'} = {
 };
 
 $ofp_enums->{'ofp_flow_wildcards'} = {
-	q{bitfield} => q{},
+	bitfield => q{},
 	0x01 => {
 		(1 << 0) => q{OFPFW_IN_PORT},
 		(1 << 1) => q{OFPFW_DL_VLAN},
@@ -302,7 +302,7 @@ $ofp_enums->{'ofp_packet_in_reason'} = {
 };
 
 $ofp_enums->{'ofp_port_config'} = {
-	q{bitfield} => q{},
+	bitfield => q{},
 	0x01 => {
 		(1 << 0) => q{OFPPC_PORT_DOWN},
 		(1 << 1) => q{OFPPC_NO_STP},
@@ -315,7 +315,7 @@ $ofp_enums->{'ofp_port_config'} = {
 };
 
 $ofp_enums->{'ofp_port_features'} = {
-	q{bitfield} => q{},
+	bitfield => q{},
 	0x01 => {
 		(1 << 0) => q{OFPPF_10MB_HD},
 		(1 << 1) => q{OFPPF_10MB_FD},
@@ -354,7 +354,7 @@ $ofp_enums->{'ofp_port_reason'} = {
 };
 
 $ofp_enums->{'ofp_port_state'} = {
-	q{bitfield} => q{},
+	bitfield => q{},
 	0x01 => {
 		(1 << 0) => q{OFPPS_LINK_DOWN},
 		(0 << 8) => q{OFPPS_STP_LISTEN},
@@ -381,7 +381,7 @@ $ofp_enums->{'ofp_queue_properties'} = {
 };
 
 $ofp_enums->{'ofp_stats_req_flags'} = {
-	q{bitfield} => q{},
+	bitfield => q{},
 	0x01 => {
 		(1 << 0) => q{OFPSF_REPLY_MORE},
 	},
@@ -478,20 +478,20 @@ $ofp_enums->{'ofp_type'} = {
 };
 
 my $struct_types = {
-	q{ofp_header} => {
+	ofp_header => {
 		0x01 => {
-			q{format} => q{C C n N},
-			q{length} => 8,
+			format => q{C C n N},
+			length => 8,
 		},
 	},
-	q{ofp_match} => {
+	ofp_match => {
 		0x01 => {
-			q{format} => q{N n H12 H12 n C x n C C x2 N N n n},
-			q{length} => 40,
+			format => q{N n H12 H12 n C x n C C x2 N N n n},
+			length => 40,
 		},
 		0x02 => {
-			q{format} => q{n n N N H12 H12 H12 H12 n C x n C C N N N N n n N C x Q> Q>},
-			q{length} => 88,
+			format => q{n n N N H12 H12 H12 H12 n C x n C C N N N N n n N C x Q> Q>},
+			length => 88,
 		},
 	},
 };
@@ -499,175 +499,175 @@ my $struct_types = {
 our $header_length = __PACKAGE__->struct_sizeof(0x01, q{ofp_header});
 
 $struct_types->{'ofp_action_dl_addr'}{0x01} = {
-	q{format} => q{n H12 x6},
-	q{length} => 16,
+	format => q{n H12 x6},
+	length => 16,
 };
 
 $struct_types->{'ofp_action_enqueue'}{0x01} = {
-	q{format} => q{n n n x6 N},
-	q{length} => 16,
+	format => q{n n n x6 N},
+	length => 16,
 };
 
 $struct_types->{'ofp_action_header'}{0x01} = {
-	q{format} => q{n n x4},
-	q{length} => 8,
+	format => q{n n x4},
+	length => 8,
 };
 
 $struct_types->{'ofp_action_nw_addr'}{0x01} = {
-	q{format} => q{n n N},
-	q{length} => 8,
+	format => q{n n N},
+	length => 8,
 };
 
 $struct_types->{'ofp_action_nw_tos'}{0x01} = {
-	q{format} => q{n n C C3},
-	q{length} => 8,
+	format => q{n n C C3},
+	length => 8,
 };
 
 $struct_types->{'ofp_action_output'}{0x01} = {
-	q{format} => q{n n n n},
-	q{length} => 8,
+	format => q{n n n n},
+	length => 8,
 };
 
 $struct_types->{'ofp_action_tp_port'}{0x01} = {
-	q{format} => q{n n n C2},
-	q{length} => 8,
+	format => q{n n n C2},
+	length => 8,
 };
 
 $struct_types->{'ofp_action_vendor_header'}{0x01} = {
-	q{format} => q{n n N},
-	q{length} => 8,
+	format => q{n n N},
+	length => 8,
 };
 
 $struct_types->{'ofp_action_vlan_pcp'}{0x01} = {
-	q{format} => q{n n C x3},
-	q{length} => 8,
+	format => q{n n C x3},
+	length => 8,
 };
 
 $struct_types->{'ofp_action_vlan_vid'}{0x01} = {
-	q{format} => q{n n n x2},
-	q{length} => 8,
+	format => q{n n n x2},
+	length => 8,
 };
 
 $struct_types->{'ofp_desc_stats'}{0x01} = {
-	q{format} => q{Z256 Z256 Z256 Z32 Z256},
-	q{length} => 1056,
+	format => q{Z256 Z256 Z256 Z32 Z256},
+	length => 1056,
 };
 
 $struct_types->{'ofp_error_msg'}{0x01} = {
-	q{format} => qq/(a$header_length) n n/,
-	q{length} => 12,
+	format => qq/(a$header_length) n n/,
+	length => 12,
 };
 
 $struct_types->{'ofp_flow_mod'} = {
 	0x01 => {
-		q{format} => qq/(a$header_length) (a$struct_types->{'ofp_match'}{0x01}{'length'}) Q> n n n n N n n/,
-		q{length} => 72,
+		format => qq/(a$header_length) (a$struct_types->{'ofp_match'}{0x01}{'length'}) Q> n n n n N n n/,
+		length => 72,
 	},
 };
 
 $struct_types->{'ofp_flow_stats'} = {
 	0x01 => {
-		q{format} => qq/n C x (a$struct_types->{'ofp_match'}{0x01}{'length'}) N N n n n x6 Q> Q> Q>/,
-		q{length} => 88,
+		format => qq/n C x (a$struct_types->{'ofp_match'}{0x01}{'length'}) N N n n n x6 Q> Q> Q>/,
+		length => 88,
 	},
 };
 
 $struct_types->{'ofp_flow_stats_request'} = {
 	0x01 => {
-		q{format} => qq/(a$struct_types->{'ofp_match'}{0x01}{'length'}) C x n/,
-		q{length} => 44,
+		format => qq/(a$struct_types->{'ofp_match'}{0x01}{'length'}) C x n/,
+		length => 44,
 	},
 };
 
 $struct_types->{'ofp_packet_in'}{0x01} = {
-	q{format} => qq/(a$header_length) N n n C x/,
-	q{length} => 20,
+	format => qq/(a$header_length) N n n C x/,
+	length => 20,
 };
 
 $struct_types->{'ofp_packet_out'}{0x01} = {
-	q{format} => qq/(a$header_length) N n n/,
-	q{length} => 16,
+	format => qq/(a$header_length) N n n/,
+	length => 16,
 };
 
 $struct_types->{'ofp_packet_queue'}{0x01} = {
-	q{format} => q/N n x2/,
-	q{length} => 8,
+	format => q/N n x2/,
+	length => 8,
 };
 
 $struct_types->{'ofp_phy_port'}{0x01} = {
-	q{format} => q{n H12 A16 N N N N N N},
-	q{length} => 48,
+	format => q{n H12 A16 N N N N N N},
+	length => 48,
 };
 
 $struct_types->{'ofp_port_mod'}{0x01} = {
-	q{format} => qq/(a$header_length) n H12 N N N x4/,
-	q{length} => 32,
+	format => qq/(a$header_length) n H12 N N N x4/,
+	length => 32,
 };
 
 $struct_types->{'ofp_port_stats'}{0x01} = {
-	q{format} => q{n x6 Q>12},
-	q{length} => 104,
+	format => q{n x6 Q>12},
+	length => 104,
 };
 
 $struct_types->{'ofp_port_stats_request'}{0x01} = {
-	q{format} => q{n x6},
-	q{length} => 8,
+	format => q{n x6},
+	length => 8,
 };
 
 $struct_types->{'ofp_port_status'}{0x01} = {
-	q{format} => qq/(a$header_length) C x7 a48/,
-	q{length} => 64,
+	format => qq/(a$header_length) C x7 a48/,
+	length => 64,
 };
 
 $struct_types->{'ofp_queue_get_config_reply'}{0x01} = {
-	q{format} => qq/(a$header_length) n x6/,
-	q{length} => 16,
+	format => qq/(a$header_length) n x6/,
+	length => 16,
 };
 
 $struct_types->{'ofp_queue_get_config_request'}{0x01} = {
-	q{format} => qq/(a$header_length) n x2/,
-	q{length} => 12,
+	format => qq/(a$header_length) n x2/,
+	length => 12,
 };
 
 $struct_types->{'ofp_queue_prop_header'}{0x01} = {
-	q{format} => q{n n x4},
-	q{length} => 8,
+	format => q{n n x4},
+	length => 8,
 };
 
 $struct_types->{'ofp_queue_prop_min_rate'}{0x01} = {
-	q{format} => q{n x6},
-	q{length} => 16,
+	format => q{n x6},
+	length => 16,
 };
 
 $struct_types->{'ofp_stats_reply'}{0x01} = {
-	q{format} => qq/(a$header_length) n n/,
-	q{length} => 12,
+	format => qq/(a$header_length) n n/,
+	length => 12,
 };
 
 $struct_types->{'ofp_stats_request'}{0x01} = {
-	q{format} => qq/(a$header_length) n n/,
-	q{length} => 12,
+	format => qq/(a$header_length) n n/,
+	length => 12,
 };
 
 $struct_types->{'ofp_switch_config'}{0x01} = {
-	q{format} => qq/(a$header_length) n n/,
-	q{length} => 12,
+	format => qq/(a$header_length) n n/,
+	length => 12,
 };
 
 $struct_types->{'ofp_switch_features'}{0x01} = {
-	q{format} => qq/(a$header_length) H16 N C x3 N N/,
-	q{length} => 32,
+	format => qq/(a$header_length) H16 N C x3 N N/,
+	length => 32,
 };
 
 $struct_types->{'ofp_table_stats'}{0x01} = {
-	q{format} => q/C x3 a32 N N N Q> Q>/,
-	q{length} => 64,
+	format => q/C x3 a32 N N N Q> Q>/,
+	length => 64,
 };
 
 $struct_types->{'ofp_experimenter_header'} = {
 	0x02 => {
-		q{format} => qq/(a$header_length) N x4/,
-		q{length} => 16,
+		format => qq/(a$header_length) N x4/,
+		length => 16,
 	},
 };
 
@@ -1077,7 +1077,7 @@ croak $self->__debug($self->__hex_preview(${$message}, 32));
 
 						my $action = {
 							q{type} => $action_type,
-							q{length} => $action_length
+							length => $action_length
 						};
 
 						if ($action_type eq q{OFPAT_OUTPUT}) {
@@ -1164,18 +1164,18 @@ croak $self->__debug($self->__hex_preview(${$message}, 32));
 				}
 
 				push @{$ret->{'body'}}, {
-					q{length} => $struct_values->[0],
-					q{table_id} => $struct_values->[1],
-					q{match} => $self->struct_decode__ofp_match($pdu_version, \$struct_values->[2]),
-					q{duration_sec} => $struct_values->[3],
-					q{duration_nsec} => $struct_values->[4],
-					q{priority} => $struct_values->[5],
-					q{idle_timeout} => $struct_values->[6],
-					q{hard_timeout} => $struct_values->[7],
-					q{cookie} => $struct_values->[8],
-					q{packet_count} => $struct_values->[9],
-					q{byte_count} => $struct_values->[10],
-					q{actions} => $actions,
+					length => $struct_values->[0],
+					table_id => $struct_values->[1],
+					match => $self->struct_decode__ofp_match($pdu_version, \$struct_values->[2]),
+					duration_sec => $struct_values->[3],
+					duration_nsec => $struct_values->[4],
+					priority => $struct_values->[5],
+					idle_timeout => $struct_values->[6],
+					hard_timeout => $struct_values->[7],
+					cookie => $struct_values->[8],
+					packet_count => $struct_values->[9],
+					byte_count => $struct_values->[10],
+					actions => $actions,
 				};
 			}
 		}
@@ -1186,13 +1186,13 @@ croak $self->__debug($self->__hex_preview(${$message}, 32));
 					$pdu_length = $self->struct_chomp($pdu_version, q{ofp_table_stats}, $message);
 
 					push @{$ret->{'body'}}, {
-						q{table_id} => $struct_values->[0],
-						q{name} => $struct_values->[1],
-						q{wildcards} => $struct_values->[2],
-						q{max_entries} => $struct_values->[3],
-						q{active_count} => $struct_values->[4],
-						q{lookup_count} => $struct_values->[5],
-						q{matched_count} => $struct_values->[6],
+						table_id => $struct_values->[0],
+						name => $struct_values->[1],
+						wildcards => $struct_values->[2],
+						max_entries => $struct_values->[3],
+						active_count => $struct_values->[4],
+						lookup_count => $struct_values->[5],
+						matched_count => $struct_values->[6],
 					};
 				}
 			}
@@ -1206,19 +1206,19 @@ croak $self->__debug($self->__hex_preview(${$message}, 32));
 					$pdu_length = $self->struct_chomp($pdu_version, q{ofp_port_stats}, $message);
 
 					push @{$ret->{'body'}}, {
-						q{port_no} => $struct_values->[0],
-						q{rx_packets} => $struct_values->[1],
-						q{tx_packets} => $struct_values->[2],
-						q{rx_bytes} => $struct_values->[3],
-						q{tx_bytes} => $struct_values->[4],
-						q{rx_dropped} => $struct_values->[5],
-						q{tx_dropped} => $struct_values->[6],
-						q{rx_errors} => $struct_values->[7],
-						q{tx_errors} => $struct_values->[8],
-						q{rx_frame_err} => $struct_values->[9],
-						q{rx_over_err} => $struct_values->[10],
-						q{rx_crc_err} => $struct_values->[11],
-						q{collisions} => $struct_values->[12],
+						port_no => $struct_values->[0],
+						rx_packets => $struct_values->[1],
+						tx_packets => $struct_values->[2],
+						rx_bytes => $struct_values->[3],
+						tx_bytes => $struct_values->[4],
+						rx_dropped => $struct_values->[5],
+						tx_dropped => $struct_values->[6],
+						rx_errors => $struct_values->[7],
+						tx_errors => $struct_values->[8],
+						rx_frame_err => $struct_values->[9],
+						rx_over_err => $struct_values->[10],
+						rx_crc_err => $struct_values->[11],
+						collisions => $struct_values->[12],
 					};
 				}
 			}
@@ -1248,7 +1248,6 @@ my $ret = $ofp->ofpt_encode($of_version, $of_type, $xid, $struct_args, $struct_b
 
 =cut
 
-sub new {
 sub ofpt_encode($$$;$$) {
 	my $self = shift;
 	my ($version, $type, $xid, $struct_args, $struct_body) = @_;
@@ -1524,10 +1523,10 @@ sub struct_decode__ofp_header($$) {
 	my $ofp_header = $self->struct_decode(0x01, q{ofp_header}, $struct_data);
 
 	my $ret = {
-		q{version} => $ofp_header->[0],
-		q{type} => $ofp_header->[1],
-		q{length} => $ofp_header->[2],
-		q{xid} => $ofp_header->[3],
+		version => $ofp_header->[0],
+		type => $ofp_header->[1],
+		length => $ofp_header->[2],
+		xid => $ofp_header->[3],
 	};
 
 	return $ret;
@@ -1543,46 +1542,46 @@ sub struct_decode__ofp_match($$$) {
 
 	if ($version == 0x01) {
 		$ret = {
-			q{wildcards} => $ofp_match->[0],
-			q{in_port} => $ofp_match->[1],
-			q{dl_src} => $self->__format_pretty__hex_string($ofp_match->[2]),
-			q{dl_dst} => $self->__format_pretty__hex_string($ofp_match->[3]),
-			q{dl_vlan} => $ofp_match->[4],
-			q{dl_vlan_pcp} => $ofp_match->[5],
-			q{dl_type} => sprintf(q{0x%0.4x}, $ofp_match->[6]),
-			q{nw_tos} => $ofp_match->[7],
-			q{nw_proto} => $ofp_match->[8],
-			q{nw_src} => $ofp_match->[9],
-			q{nw_dst} => $ofp_match->[10],
-			q{tp_src} => $ofp_match->[11],
-			q{tp_dst} => $ofp_match->[12],
+			wildcards => $ofp_match->[0],
+			in_port => $ofp_match->[1],
+			dl_src => $self->__format_pretty__hex_string($ofp_match->[2]),
+			dl_dst => $self->__format_pretty__hex_string($ofp_match->[3]),
+			dl_vlan => $ofp_match->[4],
+			dl_vlan_pcp => $ofp_match->[5],
+			dl_type => sprintf(q{0x%0.4x}, $ofp_match->[6]),
+			nw_tos => $ofp_match->[7],
+			nw_proto => $ofp_match->[8],
+			nw_src => $ofp_match->[9],
+			nw_dst => $ofp_match->[10],
+			tp_src => $ofp_match->[11],
+			tp_dst => $ofp_match->[12],
 		};
 	}
 	elsif ($version == 0x02) {
 		$ret = {
-			q{type} => $ofp_match->[0],
-			q{length} => $ofp_match->[1],
-			q{in_port} => $ofp_match->[2],
-			q{wildcards} => $ofp_match->[3],
-			q{dl_src} => $self->__format_pretty__hex_string($ofp_match->[4]),
-			q{dl_src_mask} => $ofp_match->[5],
-			q{dl_dst} => $self->__format_pretty__hex_string($ofp_match->[6]),
-			q{dl_dst_mask} => $ofp_match->[7],
-			q{dl_vlan} => $ofp_match->[8],
-			q{dl_vlan_pcp} => $ofp_match->[9],
-			q{dl_type} => sprintf(q{0x%0.4x}, $ofp_match->[10]),
-			q{nw_tos} => $ofp_match->[11],
-			q{nw_proto} => $ofp_match->[12],
-			q{nw_src} => $ofp_match->[13],
-			q{nw_src_mask} => $ofp_match->[14],
-			q{nw_dst} => $ofp_match->[15],
-			q{nw_dst_mask} => $ofp_match->[16],
-			q{tp_src} => $ofp_match->[17],
-			q{tp_dst} => $ofp_match->[18],
-			q{mpls_label} => $ofp_match->[19],
-			q{mpls_tc} => $ofp_match->[20],
-			q{metadata} => $ofp_match->[21],
-			q{metadata_mask} => $ofp_match->[22],
+			type => $ofp_match->[0],
+			length => $ofp_match->[1],
+			in_port => $ofp_match->[2],
+			wildcards => $ofp_match->[3],
+			dl_src => $self->__format_pretty__hex_string($ofp_match->[4]),
+			dl_src_mask => $ofp_match->[5],
+			dl_dst => $self->__format_pretty__hex_string($ofp_match->[6]),
+			dl_dst_mask => $ofp_match->[7],
+			dl_vlan => $ofp_match->[8],
+			dl_vlan_pcp => $ofp_match->[9],
+			dl_type => sprintf(q{0x%0.4x}, $ofp_match->[10]),
+			nw_tos => $ofp_match->[11],
+			nw_proto => $ofp_match->[12],
+			nw_src => $ofp_match->[13],
+			nw_src_mask => $ofp_match->[14],
+			nw_dst => $ofp_match->[15],
+			nw_dst_mask => $ofp_match->[16],
+			tp_src => $ofp_match->[17],
+			tp_dst => $ofp_match->[18],
+			mpls_label => $ofp_match->[19],
+			mpls_tc => $ofp_match->[20],
+			metadata => $ofp_match->[21],
+			metadata_mask => $ofp_match->[22],
 		};
 	}
 	else {
@@ -1652,15 +1651,15 @@ sub struct_decode__ofp_phy_port($$$) {
 	my $ofp_phy_port = $self->struct_decode($version, q{ofp_phy_port}, $struct_data);
 
 	my $ret = {
-		q{port_no} => $ofp_phy_port->[0],
-		q{hw_addr} => $self->__format_pretty__hex_string($ofp_phy_port->[1]),
-		q{name} => $ofp_phy_port->[2],
-		q{config} => $ofp_phy_port->[3],
-		q{state} => $ofp_phy_port->[4],
-		q{curr} => $ofp_phy_port->[5],
-		q{advertised} => $ofp_phy_port->[6],
-		q{supported} => $ofp_phy_port->[7],
-		q{peer} => $ofp_phy_port->[8],
+		port_no => $ofp_phy_port->[0],
+		hw_addr => $self->__format_pretty__hex_string($ofp_phy_port->[1]),
+		name => $ofp_phy_port->[2],
+		config => $ofp_phy_port->[3],
+		state => $ofp_phy_port->[4],
+		curr => $ofp_phy_port->[5],
+		advertised => $ofp_phy_port->[6],
+		supported => $ofp_phy_port->[7],
+		peer => $ofp_phy_port->[8],
 	};
 
 	return $ret;
@@ -1811,6 +1810,10 @@ sub __hex_preview($$$) {
 	return join(q{ }, unpack(q{(a2)*}, unpack(qq{H$len}, $data)));
 }
 
+=back
+
+=cut
+
 package Net::OpenFlow::Protocol::Debug;
 
 use parent qw{Net::OpenFlow::Protocol};
@@ -1953,6 +1956,3 @@ sub __function_debug {
 }
 
 1;
-
-=back
-

@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Net-OpenFlow
-version:            0.01
+version:            0.02
 abstract:           Communicate with OpenFlow switches.
 author:
     - Matt Ryan <inetuid@gmail.com>
